@@ -42,6 +42,32 @@ class State(object):
                 , self.horizontal
                 )
 
+class Aim(object):
+    def __init__(self):
+        self.aim        = 0
+        self.vertical   = 0
+        self.horizontal = 0
+
+    def update(self, actions):
+        if type(actions) is list:
+            for action in actions:
+                self.update(action)
+        else:
+            x, v = actions
+            if x == Action.Forward:
+                self.horizontal += v
+                self.vertical   += (self.aim * v)
+            elif x == Action.Up:
+                self.aim -= v
+            elif x == Action.Down:
+                self.aim += v
+
+    def __str__(self):
+        return 'Vertical: {} - Horizontal: {}'.format(
+                self.vertical
+                , self.horizontal
+                )
+
 
 def parse(line):
     line            = line.strip()
@@ -64,12 +90,20 @@ def main(args):
     ys      = [parse(x) for x in xs]
 
     # Generates state handler
-    state   = State()
+    state = State()
     # Updates state
     state.update(ys)
 
     # Solves part 1
     print(state.vertical * state.horizontal)
+
+    # Generates state handler
+    aim = Aim()
+    # Updates state
+    aim.update(ys)
+
+    # Solves part 2
+    print(aim.vertical * aim.horizontal)
 
 
 if __name__ == '__main__':
