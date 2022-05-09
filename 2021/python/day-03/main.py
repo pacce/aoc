@@ -1,61 +1,42 @@
 from argparse import ArgumentParser
-# import numpy as np
+import numpy as np
 
 
-class Accumulator(object):
-    def __init__(self, length):
-        self.acc    = [0] * length
-        self.count  = 0
+def condition(line):
+    return np.array([int(c) for c in line])
 
-    def update(self, line):
-        self.count += 1
-        for (i, c) in enumerate(line):
-            self.acc[i] += int(c)
 
-    def msb(self):
-        count = int(self.count / 2)
-        return [
-                1
-                if x > count else 0
-                for x in self.acc
-                ]
+def gamma(xs):
+    ss      = np.sum(xs, axis=0)
+    length  = int(xs.shape[0] / 2.0)
+    binary  = reversed([1 if s > length else 0 for s in ss])
 
-    def lsb(self):
-        count = int(self.count / 2)
-        return [
-                0
-                if x > count else 1
-                for x in self.acc
-                ]
+    sum = 0
+    for (i, b) in enumerate(binary):
+        sum += (b * (2 ** i))
+    return sum
 
-    def gamma(self):
-        acc = 0
-        vs  = self.msb()
-        vs.reverse()
-        for (i, v) in enumerate(vs):
-            acc += (v * (2 ** i))
-        return acc
 
-    def epsilon(self):
-        acc = 0
-        vs  = self.lsb()
-        vs.reverse()
-        for (i, v) in enumerate(vs):
-            acc += (v * (2 ** i))
-        return acc
+def epsilon(xs):
+    ss      = np.sum(xs, axis=0)
+    length  = int(xs.shape[0] / 2.0)
+    binary  = reversed([0 if s > length else 1 for s in ss])
 
-    def fst(self):
-        return self.gamma() * self.epsilon()
+    sum = 0
+    for (i, b) in enumerate(binary):
+        sum += (b * (2 ** i))
+    return sum
+
+
+def fst(xs):
+    return gamma(xs) * epsilon(xs)
 
 
 def main(args):
     with open(args.file, 'r') as fd:
         lines = [x.split()[0] for x in fd.readlines()]
-
-    accumulator = Accumulator(len(lines[0]))
-    for line in lines:
-        accumulator.update(line)
-    print(accumulator.fst())
+    xs = np.stack([condition(line) for line in lines])
+    print(fst(xs))
 
 
 if __name__ == '__main__':
