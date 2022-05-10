@@ -2,6 +2,9 @@ from argparse import ArgumentParser
 import numpy as np
 
 
+START = (None, 0)
+
+
 def numbers(line):
     line = line.split(',')
     return [int(c) for c in line]
@@ -30,8 +33,8 @@ def board(lines):
 
 class Board(object):
     def __init__(self, lines):
-        self.xs = board(lines)
-        self.mask = np.full(self.xs.shape, False)
+        self.xs         = board(lines)
+        self.mask       = np.full(self.xs.shape, False)
 
     def __str__(self):
         return '{}'.format(self.xs)
@@ -39,6 +42,7 @@ class Board(object):
     def update(self, value):
         index = np.where(self.xs == value)
         self.mask[index] = True
+        return self.check()
 
     def row_check(self):
         rs = np.all(self.mask, axis=1)
@@ -57,12 +61,24 @@ class Board(object):
         unmarked = self.xs[np.logical_not(self.mask)]
         return np.sum(unmarked) * value
 
+
 def fst(values, bs):
     for value in values:
-        for (i, b) in enumerate(bs):
-            b.update(value)
-            if b.check():
-                return b.coalesce(value)
+        for b in bs:
+            if b.update(value): return b.coalesce(value)
+
+
+def snd(values, bs):
+    xs = [START] * len(bs)
+    for (i, value) in enumerate(values):
+        for (j, b) in enumerate(bs):
+            if b.update(value) and xs[j] == START:
+                xs[j] = (i, b.coalesce(value))
+
+    xs.sort(key=lambda x : x[0])
+    _, coalesced = xs[-1]
+
+    return coalesced
 
 
 def main(args):
@@ -70,6 +86,7 @@ def main(args):
         lines = [x.strip() for x in fd.readlines()]
     values, bs = condition(lines)
     print(fst(values, bs))
+    print(snd(values, bs))
 
 
 if __name__ == '__main__':
