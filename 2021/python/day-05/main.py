@@ -1,4 +1,5 @@
 from argparse import ArgumentParser
+import itertools
 import numpy as np
 
 
@@ -9,6 +10,18 @@ def condition(line):
     snd = [int(c) for c in snd.split(',')]
 
     return (fst, snd)
+
+
+def vertical(x, ys):
+    ymin, ymax  = np.min(ys), np.max(ys)
+    ys          = list(range(ymin, ymax + 1))
+    return list(itertools.product([x], ys))
+
+
+def horizontal(xs, y):
+    xmin, xmax  = np.min(xs), np.max(xs)
+    xs          = list(range(xmin, xmax + 1))
+    return list(itertools.product(xs, [y]))
 
 
 class Board(object):
@@ -22,15 +35,15 @@ class Board(object):
         fst, snd = c
 
         if fst[0] == snd[0]:
-            x           = fst[0]
-            ymin, ymax  = min(fst[1], snd[1]), max(fst[1], snd[1])
-            for y in np.arange(ymin, ymax + 1):
+            ps = vertical(fst[0], [fst[1], snd[1]])
+
+            for (x, y) in ps:
                 self.xs[x, y] += 1
 
         if fst[1] == snd[1]:
-            y           = fst[1]
-            xmin, xmax  = min(fst[0], snd[0]), max(fst[0], snd[0])
-            for x in np.arange(xmin, xmax + 1):
+            ps = horizontal([fst[0], snd[0]], fst[1])
+
+            for (x, y) in ps:
                 self.xs[x, y] += 1
 
     def count(self):
