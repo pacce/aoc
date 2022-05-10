@@ -69,14 +69,14 @@ def fst(values, bs):
 
 
 def snd(values, bs):
-    xs = [START] * len(bs)
+    xs = [START] * len(bs) # Initializes hit list using (None, 0) as (Hit, Sum)
     for (i, value) in enumerate(values):
         for (j, b) in enumerate(bs):
             if b.update(value) and xs[j] == START:
                 xs[j] = (i, b.coalesce(value))
 
-    xs.sort(key=lambda x : x[0])
-    _, coalesced = xs[-1]
+    xs.sort(key=lambda x : x[0])    # Sorts results by increasing hit
+    _, coalesced = xs[-1]           # Takes last completed board
 
     return coalesced
 
