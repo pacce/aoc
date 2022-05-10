@@ -31,20 +31,24 @@ class Board(object):
     def __str__(self):
         return '{}'.format(self.xs)
 
-    def update(self, c):
-        fst, snd = c
-
+    def vertical(self, fst, snd):
         if fst[0] == snd[0]:
             ps = vertical(fst[0], [fst[1], snd[1]])
 
             for (x, y) in ps:
-                self.xs[x, y] += 1
+                self.xs[y, x] += 1
 
+    def horizontal(self, fst, snd):
         if fst[1] == snd[1]:
             ps = horizontal([fst[0], snd[0]], fst[1])
 
             for (x, y) in ps:
-                self.xs[x, y] += 1
+                self.xs[y, x] += 1
+
+    def update(self, c):
+        fst, snd = c
+        self.horizontal(fst, snd)
+        self.vertical(fst, snd)
 
     def count(self):
         return len(np.where(self.xs >= 2)[0])
@@ -61,7 +65,6 @@ def fst(cs):
         b.update(c)
 
     return b.count()
-
 
 
 def main(args):
