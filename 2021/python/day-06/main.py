@@ -3,63 +3,35 @@ import numpy as np
 
 
 NEWBORN = 8
-REBIRTH = 6
-
-
-class Fish(object):
-    def __init__(self, age):
-        self.age = age
-
-    @classmethod
-    def birth(cls):
-        return cls(NEWBORN)
-
-    def __str__(self):
-        return '{:.0f}'.format(self.age)
-
-    def __repr__(self):
-        return str(self)
-
-    def step(self):
-        if self.age == 0:
-            self.age = REBIRTH
-        else:
-            self.age -= 1
-
-    def update(self):
-        newborn = None
-        if self.age == 0:
-            newborn = Fish.birth()
-        self.step()
-        return newborn
 
 
 class School(object):
     def __init__(self, fishes):
-        self.fishes = fishes
+        self.days = [0] * (NEWBORN + 1)
+        for fish in fishes:
+            self.days[int(fish)] += 1
+        self.i = 0
 
     def __str__(self):
-        return '{}'.format(self.fishes)
+        return '{}'.format(self.days)
 
     def __repr__(self):
         return str(self)
 
-    def update(self):
-        fishes = self.fishes[:]
-        for fish in self.fishes:
-            if (newborn := fish.update()) is not None:
-                fishes.append(newborn)
-            else:
-                pass
-        self.fishes = fishes
-
     def count(self):
-        return len(self.fishes)
+        return sum(self.days)
+
+    def update(self):
+        today = self.i % len(self.days)
+        self.days[(today + 7) % len(self.days)] += self.days[today]
+
+        self.i += 1
+
 
 
 def main(args):
-    school = School([Fish(x) for x in np.loadtxt(args.file, delimiter=',')])
-    for _ in range(80):
+    school = School(np.loadtxt(args.file, delimiter=','))
+    for _ in range(256):
         school.update()
     print(school.count())
 
