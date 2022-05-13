@@ -27,13 +27,22 @@ class School(object):
 
         self.i += 1
 
+    def simulate(self, days):
+        for _ in range(days):
+            self.update()
+        return self.count()
+
 
 
 def main(args):
-    school = School(np.loadtxt(args.file, delimiter=','))
-    for _ in range(256):
-        school.update()
-    print(school.count())
+    fishes  = np.loadtxt(args.file, delimiter=',')
+    first   = School(fishes)
+    second  = School(fishes)
+    # First day
+    print(first.simulate(80))
+    # Second day
+    print(second.simulate(256))
+
 
 
 if __name__ == '__main__':
