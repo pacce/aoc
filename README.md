@@ -10,3 +10,4 @@
 | 03 | [Binary Diagnostic](https://adventofcode.com/2021/day/3) | [main.py](2021/python/day-03/main.py) | [input.txt](2021/python/day-03/input.txt) |
 | 04 | [Giant Squid](https://adventofcode.com/2021/day/4) | [main.py](2021/python/day-04/main.py) | [input.txt](2021/python/day-04/input.txt) |
 | 05 | [Hydrothermal Venture](https://adventofcode.com/2021/day/5) | [main.py](2021/python/day-05/main.py) | [input.txt](2021/python/day-05/input.txt) |
+| 06 | [Lantern Fish](https://adventofcode.com/2021/day/6) | [main.py](2021/python/day-06/main.py) | [input.txt](2021/python/day-06/input.txt) |
