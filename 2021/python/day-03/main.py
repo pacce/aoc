@@ -35,11 +35,7 @@ def oxygen(xs, index=0):
     ss      = np.sum(xs, axis=0)
     length  = xs.shape[0] / 2.0
 
-    if ss[index] >= length:
-        bit = 1
-    else:
-        bit = 0
-
+    bit         = int(ss[index] >= length)
     location    = np.where(x == bit)[0]
     xs          = xs[location]
 
@@ -55,11 +51,7 @@ def carbon(xs, index=0):
     ss      = np.sum(xs, axis=0)
     length  = xs.shape[0] / 2.0
 
-    if ss[index] >= length:
-        bit = 0
-    else:
-        bit = 1
-
+    bit         = int(ss[index] < length)
     location    = np.where(x == bit)[0]
     xs          = xs[location]
 
