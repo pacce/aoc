@@ -16,7 +16,7 @@ def decimal(xs):
 def gamma(xs):
     ss      = np.sum(xs, axis=0)
     length  = int(xs.shape[0] / 2.0)
-    binary  = [1 if s > length else 0 for s in ss]
+    binary  = [int(s > length) for s in ss]
 
     return decimal(binary)
 
@@ -24,7 +24,7 @@ def gamma(xs):
 def epsilon(xs):
     ss      = np.sum(xs, axis=0)
     length  = int(xs.shape[0] / 2.0)
-    binary  = [0 if s > length else 1 for s in ss]
+    binary  = [int(s <= length) for s in ss]
 
     return decimal(binary)
 
