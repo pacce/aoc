@@ -12,3 +12,4 @@
 | 05 | [Hydrothermal Venture](https://adventofcode.com/2021/day/5) | [main.py](2021/python/day-05/main.py) | [input.txt](2021/python/day-05/input.txt) |
 | 06 | [Lantern Fish](https://adventofcode.com/2021/day/6) | [main.py](2021/python/day-06/main.py) | [input.txt](2021/python/day-06/input.txt) |
 | 07 | [The Treachery of Whales](https://adventofcode.com/2021/day/7) | [main.py](2021/python/day-07/main.py) | [input.txt](2021/python/day-07/input.txt) |
+| 09 | [Smoke Basin](https://adventofcode.com/2021/day/9) | [main.py](2021/python/day-09/main.py) | [input.txt](2021/python/day-09/input.txt) |
