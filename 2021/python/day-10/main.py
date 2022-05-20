@@ -2,11 +2,17 @@ from argparse import ArgumentParser
 from functools import reduce
 
 
-POINTS = { ')': 3
-         , ']': 57
-         , '}': 1197
-         , '>': 25137
-         }
+CORRUPTED = { ')': 3
+            , ']': 57
+            , '}': 1197
+            , '>': 25137
+            }
+
+FIX = { '(': 1
+      , '[': 2
+      , '{': 3
+      , '<': 4
+      }
 
 
 class Chunk(object):
@@ -91,9 +97,17 @@ def corrupted(cs):
 def error(cs):
     for c in cs:
         if c.corrupted():
-            return POINTS[c.right]
+            return CORRUPTED[c.right]
     raise ValueError('no error detected')
 
+
+def fix(cs):
+    accumulator = 0
+    for c in reversed(cs):
+        if c.incomplete():
+            accumulator *= 5
+            accumulator += FIX[c.left]
+    return accumulator
 
 def first(lines):
     cs = [process(line) for line in lines]
@@ -102,10 +116,19 @@ def first(lines):
     return reduce(lambda x, y: x + y, es)
 
 
+def second(lines):
+    cs = [process(line) for line in lines]
+    cs = filter(lambda c: not corrupted(c), cs)
+    es = sorted([fix(c) for c in cs])
+
+    return es[int(len(es) / 2)]
+
+
 def main(args):
     with open(args.file, 'r') as fd:
         lines = [line.strip() for line in fd.readlines()]
-    print('First: {}'.format(first(lines)))
+    print('First    : {}'.format(first(lines)))
+    print('Second   : {}'.format(second(lines)))
 
 
 if __name__ == '__main__':
